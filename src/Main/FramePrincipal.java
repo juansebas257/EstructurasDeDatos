@@ -5,7 +5,7 @@
  */
 package Main;
 
-import ArbolesBTS.PanelArboles;
+import ArbolesBTS.PanelArbolesPanel;
 import Colas.PanelColas;
 import ListasC.PanelListasC;
 import ListasDE.PanelListasDE;
@@ -14,10 +14,13 @@ import Pilas.PanelPilas;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -27,7 +30,9 @@ import javax.swing.JTextField;
 public class FramePrincipal extends JFrame {
 
     JButton bAgregar, bEliminar;
+    JTextArea area;
     JTextField field;
+    
 
     public FramePrincipal() {
 
@@ -37,7 +42,7 @@ public class FramePrincipal extends JFrame {
         tabs.add("Listas Enlazadas", new PanelListasE());
         tabs.add("Listas Doblemente Enlazadas", new PanelListasDE());
         tabs.add("Listas Circulares", new PanelListasC());
-        tabs.add("Árboles BTS", new PanelArboles());
+        tabs.add("Árboles BTS", new PanelArbolesPanel());
 
         bAgregar = new JButton("Agregar");
         bAgregar.addActionListener(new ActionListener() {
@@ -54,24 +59,23 @@ public class FramePrincipal extends JFrame {
                 botonEliminar();
             }
         });
-        
-        field=new JTextField(30);
-        
+
+        field = new JTextField(30);
+
         setLayout(new BorderLayout());
-        
-        JPanel pBotones=new JPanel();
+
+        JPanel pBotones = new JPanel();
         pBotones.add(bAgregar);
         pBotones.add(bEliminar);
         pBotones.add(field);
-        
-        add(tabs,BorderLayout.NORTH);
-        add(new JPanel(),BorderLayout.CENTER);
-        add(pBotones,BorderLayout.SOUTH);
-        
-        setSize(600,500);
+
+        add(tabs, BorderLayout.CENTER);
+        //add(new JPanel(),BorderLayout.CENTER);
+        add(pBotones, BorderLayout.SOUTH);
+
+        setSize(600, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setExtendedState(MAXIMIZED_BOTH);
         setVisible(true);
     }
 
@@ -80,7 +84,7 @@ public class FramePrincipal extends JFrame {
     }
 
     private void botonEliminar() {
-        
+
     }
 
 }
