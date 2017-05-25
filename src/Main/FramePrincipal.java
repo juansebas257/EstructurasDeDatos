@@ -18,7 +18,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -32,12 +34,13 @@ public class FramePrincipal extends JFrame {
     JButton bAgregar, bEliminar;
     JTextArea area;
     JTextField field;
-    
+    JTabbedPane tabs;
+    PanelPilas panelPilas;
 
     public FramePrincipal() {
-
-        JTabbedPane tabs = new JTabbedPane();
-        tabs.add("Pilas", new PanelPilas());
+        panelPilas = new PanelPilas();
+        tabs = new JTabbedPane();
+        tabs.add("Pilas", panelPilas);
         tabs.add("Colas", new PanelColas());
         tabs.add("Listas Enlazadas", new PanelListasE());
         tabs.add("Listas Doblemente Enlazadas", new PanelListasDE());
@@ -74,17 +77,42 @@ public class FramePrincipal extends JFrame {
         add(pBotones, BorderLayout.SOUTH);
 
         setSize(600, 500);
+        setExtendedState(MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
 
     private void botonAgregar() {
-        
+        try {
+            int numero = Integer.parseInt(field.getText());
+            int pestannia = tabs.getSelectedIndex();
+
+            switch (pestannia) {
+                //PESTAÑA PILAS...
+                case 0:
+                    panelPilas.apilar(numero);
+                    break;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Debes ingresar un número");
+        }
     }
 
     private void botonEliminar() {
+        try {
+            int numero = Integer.parseInt(field.getText());
+            int pestannia = tabs.getSelectedIndex();
 
+            switch (pestannia) {
+                //PESTAÑA PILAS...
+                case 0:
+                    panelPilas.desapilar(numero);
+                    break;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Debes ingresar un número");
+        }
     }
 
 }

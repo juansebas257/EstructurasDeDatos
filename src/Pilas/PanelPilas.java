@@ -3,51 +3,95 @@ package Pilas;
 import Main.Bola;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
  *
  * @author Sebastian
  */
-public class PanelPilas extends Canvas{
-    
-    ArrayList<Bola> bolas;
-    Color color=Color.BLUE;
-    boolean ejecutar=false;
-    
-    public PanelPilas(){
-        bolas=new ArrayList();
-        
-        bolas.add(new Bola(50,50,50,50,color));
-        
-        // Clase en la que está el código a ejecutar 
-        TimerTask timerTask = new TimerTask() {
-            public void run() {
-                if(ejecutar){
-                // Aquí el código que queremos ejecutar. 
-                bolas.get(0).setX(100);
-                bolas.get(0).setY(100);
-                repaint();
-                System.out.println("hilo");
-                }else{
-                    ejecutar=true;
-                }
-            }
-        };
+public class PanelPilas extends Canvas {
 
-        // Aquí se pone en marcha el timer cada segundo. 
-        Timer timer = new Timer();
-        // Dentro de 0 milisegundos avísame cada 1000 milisegundos 
-        timer.scheduleAtFixedRate(timerTask, 0, 3000);
+    Nodo primero;
+    int tamannio = 0;
+    Graphics2D g2d;
+    Color colorBola, colorTexto;
+    boolean ejecutar = false;
+    int diametro = 50;
+    Font fuente;
+
+    public PanelPilas() {
+        primero = null;
+        colorBola = Color.BLUE;
+        colorTexto = Color.WHITE;
+        fuente = new Font("Verdana", Font.BOLD, 18);
     }
-    
-    public void paint(Graphics g){
-	g.setColor(bolas.get(0).getColor());
-        g.fillOval(bolas.get(0).getX(),bolas.get(0).getY(),bolas.get(0).getWidth(),bolas.get(0).getHeight());
+
+    public void paint(Graphics g) {
+        g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        //RECORRIENDO LA PILA SI HAY AL MENOS 1 NODO...
+        if (primero != null) {
+            Nodo actual = primero;
+            int posicionY = diametro;
+            do {
+                System.out.println(actual.getDato() + "");
+                g2d.setColor(colorTexto);
+                g2d.fillOval((getWidth() / 2) - diametro - 2, posicionY - 2, diametro + 4, diametro + 4);
+                g2d.setColor(colorBola);
+                g2d.fillOval((getWidth() / 2) - diametro, posicionY, diametro, diametro);
+                g2d.setColor(colorTexto);
+                g2d.setFont(fuente);
+                g2d.drawString(actual.getDato() + "", (getWidth() / 2) - (diametro / 2) - 5, posicionY + (diametro / 2) + 5);
+                actual = actual.getSiguiente();
+                posicionY += diametro;
+            } while (actual != null);
+        }
+
     }
-    
+
+    public void apilar(int numero) {
+        Nodo nodo = new Nodo(numero, null);
+        if (primero == null) {
+            primero = nodo;
+        } else {
+            nodo.setSiguiente(primero);
+            primero = nodo;
+        }
+        tamannio++;
+        repaint();
+    }
+
+    public void desapilar(int numero) {
+        Nodo actual = primero;
+        Nodo anterior = primero;
+        boolean encontrado = false;
+        if (primero != null) {
+            do {
+                if (actual.getDato() == numero) {
+                    encontrado = true;
+                    //se encontro el nodo, ahora se desapila...
+                    if (anterior == primero) {
+                        primero = primero.getSiguiente();
+                    } else {
+                        anterior.setSiguiente(actual.getSiguiente());
+                    }
+                }
+                anterior = actual;
+                actual = actual.getSiguiente();
+            } while (actual != null);
+        }
+        if (!encontrado) {
+            JOptionPane.showMessageDialog(null, "No se encontró el nodo con el dato: " + numero);
+        }
+        repaint();
+    }
+
 }
